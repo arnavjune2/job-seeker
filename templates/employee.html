@@ -152,13 +152,13 @@ a{
 </div>
 <!--cards -->
 
-
-<div class="employee-card">
-
+{% if table is not none %}
+{% for row in table %}
+    <div class="employee-card">
    <div class="title">
-      <h1>Title - Payroll accountant</h1>
-      <h2>Company - Bullseye Accounting Co.</h2>
-      <h3>Skills - Analytical, Communication,IT</h3>
+      <h1>{{row[0]}}</h1>
+      <h2>{{row[1]}}</h2>
+      <h3>{{row[2]}}</h3>
    </div>
    <div class="des">
       <h3>Job Description : Prepare budgets<br>
@@ -169,6 +169,8 @@ a{
       <button><a href="mailto:"></a>Apply</button>
    </div>
 </div>
+    {% endfor %}
+    {% endif %}
 <!--cards -->
 
 

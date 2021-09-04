@@ -1,6 +1,9 @@
 from flask import Flask, request, jsonify, render_template
 from cassandraOperations import CassandraManagement
 from cassandra.query import tuple_factory
+import jinja2
+
+jinja_env = jinja2.Environment(loader=jinja2.FileSystemLoader('templates'))
 
 
 app = Flask(__name__)
@@ -35,6 +38,7 @@ def sign_up():
         if email not in emails:
             print(email)
             info = "invalid email id or password"
+            db.closeCassandraSession()
             return render_template('sign_up.html', info=info)
         else:
             temp = session.execute(f"SELECT password , status FROM login WHERE email = '{email}' ALLOW FILTERING ;")
@@ -49,9 +53,12 @@ def sign_up():
     return render_template('sign_up.html')
 
 
-@app.route('/employee', methods=['POST', 'GET'])
+@app.route('/employee')
 def employee():
-    return render_template('employee.html')
+    session = db.getCassandraClientObject()
+    table = session.execute("select company ,job_desc,skills from master")
+
+    return render_template('employee.html', table=table)
 
 
 @app.route('/employer', methods=['POST', 'GET'])
